@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import SocketIoService from './core/service/socketio.service';
+import SocketIoService from '../core/service/socketio.service';
 
 export default {
   name: 'App',
