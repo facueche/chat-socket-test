@@ -4,34 +4,18 @@
       <div class="panel panel-primary">
         <div class="panel-body">
           <ul class="chat">
-            <li class="float-start clearfix">
-              <div class="chat-body left clearfix">
+            <li v-for="(item, index) in chat" :key="index" :class="`${item.type == 'message' ? (item.socketId == socketId() ? 'float-end clearfix' : 'float-start clearfix') : 'user-joined'}`">
+              <div v-if="item.type == 'message'" :class="`chat-body ${item.socketId == socketId() ? 'right' : 'left'} clearfix`">
                 <div class="header">
-                  <strong class="primary-font Nombre">Jack Sparrow</strong>
+                  <strong class="primary-font Nombre">{{ item.username }} </strong>
                   <small class="pull-right text-muted">
-                    <span class="glyphicon glyphicon-asterisk Tiempo">
-                      12/02/2015</span
+                    <span class="glyphicon glyphicon-asterisk Tiempo"> {{ item.datetime }}</span
                     ></small
                   >
                 </div>
-                <p class="Mensaje">Mensaje</p>
+                <p class="Mensaje">{{ item.message }}</p>
               </div>
-            </li>
-            <li class="float-end clearfix">
-              <div class="chat-body right clearfix">
-                <div class="header">
-                  <strong class="primary-font Nombre">Jack Sparrow</strong>
-                  <small class="pull-right text-muted">
-                    <span class="glyphicon glyphicon-asterisk Tiempo">
-                      12/02/2015</span
-                    ></small
-                  >
-                </div>
-                <p class="Mensaje">Mensaje</p>
-              </div>
-            </li>
-            <li class="user-joined">
-                <small>Se unió usuario</small>
+              <small v-else>Se unió {{ item.username }}</small>
             </li>
           </ul>
         </div>
@@ -41,9 +25,10 @@
               type="text"
               class="form-control input-sm"
               placeholder="Escribe un mensaje..."
+              v-model="message"
             />
             <span class="input-group-btn">
-              <button class="btn btn-warning btn-sm send-btn">
+              <button @click="sendMessage" class="btn btn-warning btn-sm send-btn">
                 Enviar
               </button>
             </span>
@@ -65,21 +50,39 @@ export default {
     },
   },
   beforeMount() {
-      if (this.username === undefined)
-        this.$router.push({ name: 'UsernameEntry' });
+    if (this.username === undefined)
+      this.$router.push({ name: 'UsernameEntry' });
   },
   created() {
     SocketIoService.setupSocketConnection();
     SocketIoService.userJoin(this.username);
+    SocketIoService.onMessageReceive(this.addChatElement)
+    SocketIoService.onUserJoined(this.addChatElement)
   },
   beforeUnmount() {
     SocketIoService.disconnect();
   },
   data() {
     return {
-      mesaage: "",
-      action: "",
+      message: "",
+      chat: [],
     };
+  },
+  methods: {
+    sendMessage() {
+      if (this.message.trim() === '')
+        return;
+      
+      SocketIoService.sendMessage(this.message);
+      this.message = '';
+    },
+    addChatElement(data) {
+      this.chat.push(data);
+      console.log(this.chat);
+    },
+    socketId() {
+      return SocketIoService.getSocketId();
+    }
   },
 };
 </script>

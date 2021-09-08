@@ -14,7 +14,11 @@ io.on('connection', function (socket) {
     });
 
     socket.on('user-join', (data) => {
-        console.log('Se unió', data.username);
         socket.broadcast.emit('user-joined', data);
+    });
+
+    socket.on('send-message', (data) => {
+        console.log(data);
+        io.emit('message-sended', data);
     });
 })
