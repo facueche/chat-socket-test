@@ -1,24 +1,18 @@
-# chat-client
+# chat-test-with-socket.io
+Express as Server + VueJS as Client
 
-## Project setup
+### Project setup
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
+### Setup .env file
+```dosini
+PORT=9000 # or whichever you want
+VUE_APP_SOCKET_ENDPOINT="http://localhost:${PORT}"
 ```
 
-### Lints and fixes files
+### Run on local
 ```
-npm run lint
+npm run local
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
