@@ -18,8 +18,6 @@
 </template>
 
 <script>
-import SocketIoService from '../core/service/socketio.service';
-
 export default {
   name: 'UsernameEntry',
   components: {
@@ -29,21 +27,12 @@ export default {
       username: '',
     }
   },
-  created() {
-    SocketIoService.setupSocketConnection();
-  },
-  beforeUnmount() {
-    SocketIoService.disconnect();
-  },
   methods: {
     join() {
       if (this.username === '') {
         alert('Debes ingresar un nombre de usuario');
         return;
       }
-
-      SocketIoService.userJoin(this.username);
-
       this.$router.push({ name: 'Chat', params: { username: this.username } });
     },
   },
