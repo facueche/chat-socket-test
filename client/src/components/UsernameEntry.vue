@@ -21,15 +21,12 @@
 import SocketIoService from '../core/service/socketio.service';
 
 export default {
-  name: 'App',
+  name: 'UsernameEntry',
   components: {
   },
   data() {
     return {
-      mesaage: '',
       username: '',
-      action: '',
-      joined: false,
     }
   },
   created() {
@@ -47,7 +44,7 @@ export default {
 
       SocketIoService.userJoin(this.username);
 
-      this.joined = true;
+      this.$router.push({ name: 'Chat', params: { username: this.username } });
     },
   },
 }
