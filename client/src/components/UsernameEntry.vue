@@ -8,7 +8,7 @@
         <div class="card-body">
           <h5 class="card-title">Ingresa tu nombre</h5>
           <div class="mb-3">
-            <input type="text" v-model="username" class="form-control" placeholder="Juan">
+            <input type="text" v-model="username" class="form-control" placeholder="Nombre" @keyup.enter="join">
           </div>
           <button class="btn btn-primary" @click="join">Unirse</button>
         </div>

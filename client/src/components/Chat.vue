@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-primary">
-        <div class="panel-body">
+        <div class="panel-body" id="chat">
           <ul class="chat">
             <li v-for="(item, index) in chat" :key="index" :class="`${item.type == 'message' ? (item.socketId == socketId() ? 'float-end clearfix' : 'float-start clearfix') : 'user-joined'}`">
               <div v-if="item.type == 'message'" :class="`chat-body ${item.socketId == socketId() ? 'right' : 'left'} clearfix`">
@@ -26,6 +26,7 @@
               class="form-control input-sm"
               placeholder="Escribe un mensaje..."
               v-model="message"
+              @keyup.enter="sendMessage"
             />
             <span class="input-group-btn">
               <button @click="sendMessage" class="btn btn-warning btn-sm send-btn">
@@ -74,11 +75,17 @@ export default {
         return;
       
       SocketIoService.sendMessage(this.message);
+
       this.message = '';
     },
     addChatElement(data) {
       this.chat.push(data);
-      console.log(this.chat);
+
+      setTimeout(() => {
+        // Como tarda en renderizar el elemento, you know
+        const container = this.$el.querySelector("#chat");
+        container.scrollTop = container.scrollHeight;
+      }, 50);
     },
     socketId() {
       return SocketIoService.getSocketId();
